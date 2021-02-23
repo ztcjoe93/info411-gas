@@ -2,7 +2,7 @@ library(Rcpp)
 library(RSNNS)
 library(caret)
 
-evaluate_mlp <- function(df_train, df_validate, df_test){
+evaluation_mlp <- function(df_train, df_validate, df_test){
   # grid search parameters for MLP
   mlp_grid <- expand.grid(
     size = list(c(7), c(7,6,7), c(7,5,5)),
@@ -33,14 +33,14 @@ evaluate_mlp <- function(df_train, df_validate, df_test){
     co_mlp_model <- mlp(df_train[,1:9], df_train[,10],
                         size = c(7,6,7),
                         learnFuncParams = c(0.02, 0.01),
-                        maxit=200
+                        maxit=100
     )
   )
   system.time(
     nox_mlp_model <- mlp(df_train[,1:9], df_train[,11],
                          size = c(7,6,7),
                          learnFuncParams = c(0.02, 0.01),
-                         maxit = 200
+                         maxit = 100
     )
   )
   
