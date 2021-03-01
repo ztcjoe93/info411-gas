@@ -1,6 +1,6 @@
 
 # void function, returns list of datasets
-getDf <- function(){
+getDf <- function(israw=FALSE){
   # fetch datasets from folder
   cDir <- rstudioapi::getActiveDocumentContext()$path
   datasetDir <- sub("(.*/)models/.*", "\\1", cDir)
@@ -24,15 +24,20 @@ getDf <- function(){
   
   # merge datasets
   df_train = do.call(what=rbind, args=df_train)
-  df_train = data.frame(apply(df_train[1:9],2,scale), df_train[10:11])
-  
-  df_validate = data.frame(apply(df_validate[1:9],2,scale), df_validate[10:11])
-  
   df_test = do.call(what=rbind, args=df_test)
-  df_test = data.frame(apply(df_test[1:9],2,scale), df_test[10:11])
-  
-  dfs = list(df_train, df_validate, df_test)
-  return (dfs)
+  if(israw){
+      dfs = list(df_train, df_validate, df_test)
+      return (dfs)
+  } else {
+      df_train = data.frame(apply(df_train[1:9],2,scale), df_train[10:11])
+      
+      df_validate = data.frame(apply(df_validate[1:9],2,scale), df_validate[10:11])
+      
+      df_test = data.frame(apply(df_test[1:9],2,scale), df_test[10:11])
+      
+      dfs = list(df_train, df_validate, df_test)
+      return (dfs)
+  }
 }
 
 # convenience functions for metrics evaluation
