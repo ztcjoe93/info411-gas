@@ -18,3 +18,30 @@ evaluation_svm(df_train, df_validate, df_test)
 evaluation_rf(df_train, df_validate, df_test)
 evaluation_mlp(df_train, df_validate, df_test)
 evaluation_gbm(df_train, df_validate, df_test)
+
+################################# Visualization of variable importance #######################################
+library(caret)
+set.seed(100)
+
+correlationMatrix <- cor(df_train[,1:9])
+# summarize the correlation matrix
+print(correlationMatrix)
+# find attributes that are highly correlated (ideally >0.85)
+highlyCorrelated <- findCorrelation(correlationMatrix, cutoff=0.85, name=TRUE)
+# print indexes of highly correlated attributes
+print(highlyCorrelated)
+
+# Train an rpart model and compute variable importance for 'NOX'.
+rPartMod <- train(NOX ~ ., data=na.omit(df_train[,-10]), method="rpart")
+rpartImp <- varImp(rPartMod) # varlmp() is used to determine feature importance
+print(rpartImp)
+plot(rpartImp, top = 9, main='Variable Importance for NOX')
+summary(rPartMod)
+
+# Train an rpart model and compute variable importance for 'CO'.
+rPartMod <- train(CO ~ ., data=na.omit(df_train[,-11]), method="rpart")
+rpartImp <- varImp(rPartMod) # varlmp() is used to determine feature importance
+print(rpartImp)
+plot(rpartImp, top = 9, main='Variable Importance for CO')
+summary(rPartMod)
+##############################################################################################################
